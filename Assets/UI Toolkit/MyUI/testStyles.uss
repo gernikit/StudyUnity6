@@ -1,2 +1,7 @@
 .panel {
+    width: 300px;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-self: center;
+    align-content: auto;
 }

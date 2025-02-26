@@ -1,10 +1,19 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/MyUI/testStyles.uss?fileID=7433441132597879392&amp;guid=f3a0aa1117dbf934e854ed411b3f3d3d&amp;type=3#testStyles" />
-    <ui:VisualElement name="Panel" style="flex-grow: 1;">
-        <ui:Label text="My first UI" style="-unity-text-align: upper-center;" />
-        <ui:TextField placeholder-text="Enter message" style="font-size: 14px;" />
-        <ui:Button text="Button" />
-        <ui:Label text="Ответ:" />
-        <ui:Label text="..." />
+    <ui:VisualElement name="Root" style="flex-direction: row;">
+        <ui:VisualElement name="MainPanel" class="panel" style="align-self: flex-start;">
+            <ui:Label text="My first UI" style="-unity-text-align: upper-center;" />
+            <ui:TextField placeholder-text="Enter message" name="QueryText" style="font-size: 14px;" />
+            <ui:Button text="Enter" name="EnterButton" enabled="true" />
+            <ui:Label text="Ответ:" />
+            <ui:Label text="..." />
+        </ui:VisualElement>
+        <ui:VisualElement name="SubPanel" class="panel" style="left: auto; right: auto;">
+            <ui:Label text="My first UI" style="-unity-text-align: upper-center;" />
+            <ui:TextField placeholder-text="Enter message" name="QueryText" style="font-size: 14px;" />
+            <ui:Button text="Enter" name="EnterButton" />
+            <ui:Label text="Ответ:" />
+            <ui:Label text="..." />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
