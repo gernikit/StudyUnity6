@@ -1,5 +1,5 @@
-.panel {
-    width: 300px;
+.vertGroup {
+    width: 450px;
     justify-content: flex-start;
     align-items: stretch;
     align-self: center;
