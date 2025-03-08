@@ -1,10 +1,14 @@
 using UnityEngine;
 
-public static class GameInitializer
+namespace Architecture
 {
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void Initialize( )
-    {
-        LanguageModel.Instance.Load(  );
-    }
+	public static class GameInitializer
+	{
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+		static void Initialize( )
+		{
+			LanguageModel.Instance.Load(  );
+		}
+	}
 }
+
