@@ -7,13 +7,10 @@ namespace Architecture
 {
 	public class GameLifetimeScope : LifetimeScope
 	{
-		[SerializeField] private HelloScreen helloScreen;
-		
 		protected override void Configure(IContainerBuilder builder)
 		{ 
 			builder.Register<HelloWorldService>(Lifetime.Singleton);
 			builder.RegisterEntryPoint<GamePresenter>();
-			builder.RegisterComponent(helloScreen);
 			builder.Register<A>( Lifetime.Scoped );
 			builder.Register<Test>( Lifetime.Scoped );
 		}
@@ -28,6 +25,11 @@ namespace Architecture
 		{
 			a = _a;
 			int i = 1;
+		}
+
+		public void Message( )
+		{
+			a.Message( );
 		}
 	}
 

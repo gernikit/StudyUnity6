@@ -3,25 +3,25 @@ using VContainer.Unity;
 
 namespace Architecture
 {
-	public class GamePresenter: IStartable
+	public class GamePresenter: IStartable, ITickable
 	{
-		readonly HelloWorldService helloWorldService_;
-		readonly HelloScreen helloScreen_;  
+		private readonly HelloWorldService helloWorldService_;
+		private readonly Test test_;
 
-		public GamePresenter(HelloWorldService helloWorldService, HelloScreen helloScreen )
+		public GamePresenter(HelloWorldService helloWorldService, Test test )
 		{
 			helloWorldService_ = helloWorldService;
-			helloScreen_ = helloScreen;
+			test_ = test;
 		}
 
 		public void Tick( )
 		{
-			helloWorldService_.Hello();
+			//helloWorldService_.Hello();
 		}
 
 		public void Start( )
 		{
-			helloScreen_.helloButton.clicked += () => helloWorldService_.Hello();
+			test_.Message(  );
 		}
 	}
 }
