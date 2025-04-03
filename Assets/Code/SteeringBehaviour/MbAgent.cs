@@ -6,29 +6,28 @@ namespace SteeringBehaviour
 	public class MbAgent: MonoBehaviour
 	{
 		public Transform target;
-		public float moveSpeed;
 		public float mass = 1;
 		[Space] 
 		public float steeringForceValue = 1f;
 		
-		private SeekBehaviour seekBehaviour_ = new SeekBehaviour( );
+		private Behaviours behaviours_ = new Behaviours( );
 		private Vector3 currentVelocity_ = Vector3.zero;
 
 		private void Update( )
 		{
-			Seek( );
+			//var steeringForce = behaviours_.GetFleeForce( currentVelocity_, transform.position, GetTargetPos(  ), steeringForceValue, mass );
+			//var steeringForce = behaviours_.GetArriveForce( currentVelocity_, transform.position, GetTargetPos(  ), steeringForceValue, mass, 1f );
+			var steeringForce = behaviours_.GetWanderForce( currentVelocity_, transform.position, transform.up, 5, 3, 1);
+			
+			Debug.Log( "steeringForce " + steeringForce.magnitude );
+			Debug.Log( "currentVelocity " + currentVelocity_.magnitude );
+			
+			currentVelocity_ += steeringForce * Time.deltaTime;
+			transform.position += currentVelocity_ * Time.deltaTime;
 			RotateToVelocity(  );
 			DrawHelpers(  );
 		}
-
-		private void Seek( )
-		{
-			var desiredVelocity = GetTargetPos( ) - transform.position;
-			var steeringForce = seekBehaviour_.GetSteeringForce( currentVelocity_, desiredVelocity, steeringForceValue, mass );
-			currentVelocity_ += steeringForce * Time.deltaTime;
-			transform.position += currentVelocity_ * Time.deltaTime;
-		}
-
+		
 		private void RotateToVelocity( )
 		{
 			transform.rotation = Quaternion.LookRotation(currentVelocity_);
@@ -41,7 +40,7 @@ namespace SteeringBehaviour
 
 		private void DrawHelpers( )
 		{
-			Debug.DrawLine(transform.position, (transform.position + currentVelocity_) * 3, Color.red);
+			Debug.DrawRay( transform.position, currentVelocity_ * 5, Color.red );
 		}
 	}
 }
