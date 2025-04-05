@@ -1,24 +1,25 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace SteeringBehaviour
 {
-	public class Behaviours
+	public static class Behaviours
 	{
-		public Vector3 GetSeekForce( Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _targetPosition, float _forceValue, float _objectMass )
+		public static Vector3 GetSeekForce( Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _targetPosition, float _forceValue, float _objectMass )
 		{
-			var desiredVelocity = _targetPosition - _objectPosition;
-			var steeringForce = desiredVelocity - _currentVelocity;
-			return Vector3.Normalize( steeringForce ) * _forceValue / _objectMass;
+			Vector3 desiredVelocity = (_targetPosition - _objectPosition).normalized * _forceValue;
+			Vector3 steeringForce = desiredVelocity - _currentVelocity;
+			return steeringForce / _objectMass;
 		}
 		
-		public Vector3 GetFleeForce( Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _targetPosition, float _forceValue, float _objectMass )
+		public static Vector3 GetFleeForce( Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _targetPosition, float _maxForce, float _objectMass )
 		{
-			var desiredVelocity = _objectPosition - _targetPosition;
-			var steeringForce = desiredVelocity - _currentVelocity;
-			return Vector3.Normalize( steeringForce ) * _forceValue / _objectMass;
+			Vector3 desiredVelocity = (_objectPosition - _targetPosition).normalized * _maxForce;
+			Vector3 steeringForce = desiredVelocity - _currentVelocity;
+			return steeringForce / _objectMass;
 		}
 		
-		public Vector3 GetArriveForce( Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _targetPosition, float _forceValue, float _objectMass, float _slowingDistance )
+		public static Vector3 GetArriveForce( Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _targetPosition, float _forceValue, float _objectMass, float _slowingDistance )
 		{
 			var desiredVelocity = (_targetPosition - _objectPosition);
 			float distance = desiredVelocity.magnitude;
@@ -41,37 +42,20 @@ namespace SteeringBehaviour
 			
 			return steeringForce / _objectMass;
 		}
-		
-		public Vector3 GetWanderForce(Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _forwardDirection, 
-			float _wanderRadius, float _wanderDistance, float _jitterAmount)
+
+		public static Vector3 GetPursuitForce( Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _targetVelocity, Vector3 _targetPosition, float _forceValue, float _objectMass )
 		{
-			/*// Apply random jitter in XY space (Z should always be 0)
-			Vector3 randomJitter = new Vector3(
-				Random.Range(-1f, 1f),
-				Random.Range(-1f, 1f), // Only XY changes
-				0f                     // Keep Z constant
-			) * _jitterAmount;
-
-			// Smoothly adjust wander target instead of jumping
-			wanderTarget += randomJitter;
-			wanderTarget = wanderTarget.normalized * _wanderRadius;
-
-			// Move the wander circle in front of the AI
-			Vector3 targetPosition = _objectPosition + (_forwardDirection.normalized * _wanderDistance) + wanderTarget;
-
-			// Ensure movement is only in XY
-			targetPosition.z = _objectPosition.z;
-
-			// Compute desired velocity
-			Vector3 desiredVelocity = (targetPosition - _objectPosition).normalized * _currentVelocity.magnitude;
-
-			// Ensure movement is only in XY
-			desiredVelocity.z = 0;
-
-			// Calculate steering force
-			return desiredVelocity - _currentVelocity;*/
-
-			return Vector3.zero;
+			var anticipationRatio = ( _targetPosition - _objectPosition ).magnitude / _targetVelocity.magnitude;
+			var targetFuturePosition = _targetPosition + _targetVelocity * anticipationRatio;
+			return GetSeekForce( _currentVelocity, _objectPosition, targetFuturePosition, _forceValue, _objectMass );
+		}
+		
+		public static Vector3 GetEvadingForce( Vector3 _currentVelocity, Vector3 _objectPosition, Vector3 _targetVelocity, Vector3 _targetPosition, float _forceValue, float _objectMass )
+		{
+			var anticipationRatio = (_targetPosition - _objectPosition).magnitude / _targetVelocity.magnitude;
+			var targetFuturePosition = _targetPosition + _targetVelocity * anticipationRatio;
+			Debug.DrawLine( _objectPosition, targetFuturePosition );
+			return GetFleeForce( _currentVelocity, _objectPosition, targetFuturePosition, _forceValue, _objectMass );
 		}
 	}
 }

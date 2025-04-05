@@ -12,8 +12,7 @@ namespace SteeringBehaviour
 				new Vector3(Input.mousePosition.x, Input.mousePosition.y, -camera.transform.position.z)
 			);
 			mousePosition.z = 0;
-			Debug.Log( mousePosition );
-			
+
 			transform.position = mousePosition;
 		}
 	}
