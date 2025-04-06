@@ -23,9 +23,7 @@ namespace SteeringBehaviour
 		{
 			var desiredVelocity = (_targetPosition - _objectPosition);
 			float distance = desiredVelocity.magnitude;
-			
-			Debug.Log( "dictance " + distance );
-			
+
 			desiredVelocity.Normalize(  );
 			
 			if (distance <= _slowingDistance)

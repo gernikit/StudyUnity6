@@ -1,17 +1,18 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace SteeringBehaviour
 {
 	public class MbAgent: MonoBehaviour
 	{
-		public MbAgent target;
+		public List<MbAgent> targets;
 		public float mass = 1;
 
 		[Space] 
 		public float maxForceValue = 1f;
 
 		public EBehaviourType behaviourType;
+		public EBehaviourType behaviourType2;
 		
 		public Vector3 currentVelocity { get; private set; }
 
@@ -24,32 +25,35 @@ namespace SteeringBehaviour
 
 		private void Update( )
 		{
-			var steeringForce = GetBehaviourForce( );
-			
+			var steeringForce = GetBehaviourForce( behaviourType, 0 );
+			var steeringForce2 = GetBehaviourForce( behaviourType2, 1 );
+
+			var generalSteeringForce = steeringForce + steeringForce2;
+			currentVelocity += generalSteeringForce * Time.deltaTime;
+
 			Debug.Log( "steeringForce " + steeringForce.magnitude );
 			Debug.Log( "currentVelocity " + currentVelocity.magnitude );
 			
-			currentVelocity += steeringForce * Time.deltaTime;
 			transform.position += currentVelocity * Time.deltaTime;
 			RotateToVelocity(  );
 			DrawHelpers(  );
 		}
 
-		private Vector3 GetBehaviourForce( )
+		private Vector3 GetBehaviourForce( EBehaviourType _behaviourType, int _targetIndex )
 		{
-			switch ( behaviourType )
+			switch ( _behaviourType )
 			{
 				case EBehaviourType.Seek:
-					return Behaviours.GetSeekForce( currentVelocity, transform.position, GetTargetPos(  ), maxForceValue, mass);
+					return Behaviours.GetSeekForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass);
 				case EBehaviourType.Flee:
-					return Behaviours.GetFleeForce( currentVelocity, transform.position, GetTargetPos(  ), maxForceValue, mass );
+					return Behaviours.GetFleeForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass );
 				case EBehaviourType.Arrive:
-					return Behaviours.GetArriveForce( currentVelocity, transform.position, GetTargetPos(  ), maxForceValue, mass, 1f );
+					return Behaviours.GetArriveForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass, 1f );
 				case EBehaviourType.Pursuit:
-					return Behaviours.GetPursuitForce( currentVelocity, transform.position, target.currentVelocity, GetTargetPos(  ),  maxForceValue, mass  );
+					return Behaviours.GetPursuitForce( currentVelocity, transform.position, targets[_targetIndex].currentVelocity, GetTargetPos( _targetIndex ),  maxForceValue, mass  );
 					break;
 				case EBehaviourType.Evading:
-					return Behaviours.GetEvadingForce( currentVelocity, transform.position, target.currentVelocity, GetTargetPos(  ),  maxForceValue, mass  );
+					return Behaviours.GetEvadingForce( currentVelocity, transform.position, targets[_targetIndex].currentVelocity, GetTargetPos( _targetIndex ),  maxForceValue, mass  );
 				default:
 					return Vector3.zero;
 			}
@@ -62,9 +66,9 @@ namespace SteeringBehaviour
 			transform.rotation = Quaternion.LookRotation(currentVelocity);
 		}
 
-		private Vector3 GetTargetPos( )
+		private Vector3 GetTargetPos( int _index )
 		{
-			if ( target == null )
+			if ( targets == null || targets.Count == 0 )
 			{
 				Vector3 mousePosition = camera_.ScreenToWorldPoint(
 					new Vector3(Input.mousePosition.x, Input.mousePosition.y, -camera_.transform.position.z)
@@ -73,7 +77,8 @@ namespace SteeringBehaviour
 				return mousePosition;
 			}
 			
-			return target.gameObject.transform.position;
+			
+			return targets[_index].gameObject.transform.position;
 		}
 
 		private void DrawHelpers( )
