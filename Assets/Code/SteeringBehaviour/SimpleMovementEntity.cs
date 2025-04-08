@@ -22,5 +22,11 @@ namespace SteeringBehaviour
 			maxVelocity = _creationParams.maxVelocity;
 			mass = _creationParams.mass;
 		}
+
+		public override void AddForce( Vector3 _force )
+		{
+			var newVelocity = currentVelocity + _force;
+			currentVelocity = Vector3.ClampMagnitude( newVelocity, maxVelocity );
+		}
 	}
 }

@@ -5,16 +5,7 @@ namespace SteeringBehaviour
 {
 	public class MbAgent: MonoBehaviour
 	{
-		public List<MbAgent> targets;
-		public float mass = 1;
-
-		[Space] 
-		public float maxForceValue = 1f;
-
-		public EBehaviourType behaviourType;
-		public EBehaviourType behaviourType2;
-		
-		public Vector3 currentVelocity { get; private set; }
+		public SimpleMovementEntity movementEntity { get; private set; }
 
 		private Camera camera_;
 
@@ -44,16 +35,16 @@ namespace SteeringBehaviour
 			switch ( _behaviourType )
 			{
 				case EBehaviourType.Seek:
-					return Behaviours.GetSeekForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass);
+					return SteeringForces.GetSeekForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass);
 				case EBehaviourType.Flee:
-					return Behaviours.GetFleeForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass );
+					return SteeringForces.GetFleeForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass );
 				case EBehaviourType.Arrive:
-					return Behaviours.GetArriveForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass, 1f );
+					return SteeringForces.GetArriveForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass, 1f );
 				case EBehaviourType.Pursuit:
-					return Behaviours.GetPursuitForce( currentVelocity, transform.position, targets[_targetIndex].currentVelocity, GetTargetPos( _targetIndex ),  maxForceValue, mass  );
+					return SteeringForces.GetPursuitForce( currentVelocity, transform.position, targets[_targetIndex].currentVelocity, GetTargetPos( _targetIndex ),  maxForceValue, mass  );
 					break;
 				case EBehaviourType.Evading:
-					return Behaviours.GetEvadingForce( currentVelocity, transform.position, targets[_targetIndex].currentVelocity, GetTargetPos( _targetIndex ),  maxForceValue, mass  );
+					return SteeringForces.GetEvadingForce( currentVelocity, transform.position, targets[_targetIndex].currentVelocity, GetTargetPos( _targetIndex ),  maxForceValue, mass  );
 				default:
 					return Vector3.zero;
 			}
