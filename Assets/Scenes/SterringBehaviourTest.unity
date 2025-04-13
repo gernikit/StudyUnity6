@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &416145712
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -240,11 +240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b164df704ac24507a4b9e6797f608bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets: []
-  mass: 1
-  maxForceValue: 1
-  behaviourType: 0
-  behaviourType2: 0
+  forceValue: 5
+  target: {fileID: 1659684296}
 --- !u!1 &436496529
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,11 +288,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b164df704ac24507a4b9e6797f608bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets: []
-  mass: 1.25
-  maxForceValue: 1
-  behaviourType: 1
-  behaviourType2: 0
+  forceValue: 5
+  target: {fileID: 1659684296}
 --- !u!65 &436496532
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -664,13 +658,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b164df704ac24507a4b9e6797f608bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets:
-  - {fileID: 416145716}
-  - {fileID: 1758928776}
-  mass: 1.25
-  maxForceValue: 10
-  behaviourType: 1
-  behaviourType2: 2
+  forceValue: 4
+  target: {fileID: 1758928776}
 --- !u!65 &1659684297
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -895,11 +884,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b164df704ac24507a4b9e6797f608bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets: []
-  mass: 1
-  maxForceValue: 10
-  behaviourType: 1
-  behaviourType2: 0
+  forceValue: 5
+  target: {fileID: 0}
 --- !u!1 &1961611717
 GameObject:
   m_ObjectHideFlags: 0

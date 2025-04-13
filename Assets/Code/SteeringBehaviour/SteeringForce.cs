@@ -13,11 +13,16 @@ namespace SteeringBehaviour
 			entity = _movementEntity;
 		}
 
-		public void Update( )
+		public void ApplyForce( float _deltaTime )
 		{
 			//Maybe use mass for velocity in FUTURE
 			var clampedSteering = Vector3.ClampMagnitude( steeringForce, maxForceValue );
-			entity.AddForce( clampedSteering );
+			entity.AddForce( clampedSteering * _deltaTime );
+		}
+
+		public void ResetForce( )
+		{
+			steeringForce = Vector3.zero;
 		}
 
 		public void SetMaxForceValue( float _maxValue )

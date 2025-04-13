@@ -1,36 +1,64 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SteeringBehaviour
 {
 	public class MbAgent: MonoBehaviour
 	{
+		[SerializeField] private float forceValue = 5f;
+		
 		public SimpleMovementEntity movementEntity { get; private set; }
+		public SteeringForce entitySteeringForce { get; private set; }
+		
+		public MbAgent target;
 
 		private Camera camera_;
 
 		private void Start( )
 		{
 			camera_ = Camera.main;
+			
+			Init(  );
 		}
 
 		private void Update( )
 		{
-			var steeringForce = GetBehaviourForce( behaviourType, 0 );
-			var steeringForce2 = GetBehaviourForce( behaviourType2, 1 );
-
-			var generalSteeringForce = steeringForce + steeringForce2;
-			currentVelocity += generalSteeringForce * Time.deltaTime;
-
-			Debug.Log( "steeringForce " + steeringForce.magnitude );
-			Debug.Log( "currentVelocity " + currentVelocity.magnitude );
+			// var steeringForce = GetBehaviourForce( behaviourType, 0 );
+			// var steeringForce2 = GetBehaviourForce( behaviourType2, 1 );
+			//
+			// var generalSteeringForce = steeringForce + steeringForce2;
+			// currentVelocity += generalSteeringForce * Time.deltaTime;
+			//
+			// Debug.Log( "steeringForce " + steeringForce.magnitude );
+			// Debug.Log( "currentVelocity " + currentVelocity.magnitude );
+			//
+			// transform.position += currentVelocity * Time.deltaTime;
 			
-			transform.position += currentVelocity * Time.deltaTime;
+			entitySteeringForce.Seek( GetTargetPos( 0 ), forceValue );
+			entitySteeringForce.ApplyForce( Time.deltaTime );
+			entitySteeringForce.ResetForce(  );
+			
+			movementEntity.ApplyVelocity( Time.deltaTime );
+
 			RotateToVelocity(  );
 			DrawHelpers(  );
 		}
 
-		private Vector3 GetBehaviourForce( EBehaviourType _behaviourType, int _targetIndex )
+		private void Init( )
+		{
+			var entityParams = new SimpleMovementEntityCreationParams( )
+			{
+				entity = gameObject,
+				mass = 1,
+				maxVelocity = 100
+			};
+			
+			movementEntity = MovementEntityCreator.CreateSimpleMovementEntity( entityParams );
+			
+			entitySteeringForce = new SteeringForce( );
+			entitySteeringForce.Init( movementEntity );
+		}
+
+		/*private void SetBehaviourForce( EBehaviourType _behaviourType, int _targetIndex )
 		{
 			switch ( _behaviourType )
 			{
@@ -50,16 +78,16 @@ namespace SteeringBehaviour
 			}
 			
 			return Vector3.zero;
-		}
+		}*/
 		
 		private void RotateToVelocity( )
 		{
-			transform.rotation = Quaternion.LookRotation(currentVelocity);
+			transform.rotation = Quaternion.LookRotation( movementEntity.currentVelocity );
 		}
 
 		private Vector3 GetTargetPos( int _index )
 		{
-			if ( targets == null || targets.Count == 0 )
+			if ( target == null )
 			{
 				Vector3 mousePosition = camera_.ScreenToWorldPoint(
 					new Vector3(Input.mousePosition.x, Input.mousePosition.y, -camera_.transform.position.z)
@@ -69,12 +97,12 @@ namespace SteeringBehaviour
 			}
 			
 			
-			return targets[_index].gameObject.transform.position;
+			return target.movementEntity.position;
 		}
 
 		private void DrawHelpers( )
 		{
-			Debug.DrawRay( transform.position, currentVelocity * 5, Color.red );
+			Debug.DrawRay( transform.position, movementEntity.currentVelocity * 5, Color.red );
 		}
 	}
 }

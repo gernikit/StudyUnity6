@@ -28,5 +28,10 @@ namespace SteeringBehaviour
 			var newVelocity = currentVelocity + _force;
 			currentVelocity = Vector3.ClampMagnitude( newVelocity, maxVelocity );
 		}
+
+		public override void ApplyVelocity( float _deltaTime )
+		{
+			position += currentVelocity * _deltaTime;
+		}
 	}
 }

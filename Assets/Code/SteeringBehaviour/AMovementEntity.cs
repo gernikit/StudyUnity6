@@ -10,5 +10,6 @@ namespace SteeringBehaviour
 		public abstract float mass { get; protected set; }
 
 		public abstract void AddForce( Vector3 _force );
+		public abstract void ApplyVelocity( float _deltaTime );
 	}
 }
