@@ -11,12 +11,8 @@ namespace SteeringBehaviour
 		public SimpleMovementEntity movementEntity { get; private set; }
 		public SteeringForce entitySteeringForce { get; private set; }
 
-		private Camera camera_;
-
 		private void Start( )
 		{
-			camera_ = Camera.main;
-			
 			Init(  );
 		}
 
