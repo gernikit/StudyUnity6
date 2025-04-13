@@ -1,6 +1,6 @@
 ﻿namespace SteeringBehaviour
 {
-	public enum EBehaviourType
+	public enum EForceType
 	{
 		Unknown,
 		
@@ -8,6 +8,6 @@
 		Flee,
 		Arrive,
 		Pursuit,
-		Evading
+		Avoid
 	}
 }

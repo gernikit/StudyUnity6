@@ -240,8 +240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b164df704ac24507a4b9e6797f608bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  forceParams: []
   forceValue: 5
-  target: {fileID: 1659684296}
+  slowingDistanceForTarget: 3
 --- !u!1 &436496529
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,8 +289,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b164df704ac24507a4b9e6797f608bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  forceParams: []
   forceValue: 5
-  target: {fileID: 1659684296}
+  slowingDistanceForTarget: 3
 --- !u!65 &436496532
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -658,8 +660,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b164df704ac24507a4b9e6797f608bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  forceParams:
+  - forceType: 1
+    target: {fileID: 1758928776}
   forceValue: 4
-  target: {fileID: 1758928776}
+  slowingDistanceForTarget: 3
 --- !u!65 &1659684297
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -884,8 +889,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b164df704ac24507a4b9e6797f608bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  forceParams: []
   forceValue: 5
-  target: {fileID: 0}
+  slowingDistanceForTarget: 3
 --- !u!1 &1961611717
 GameObject:
   m_ObjectHideFlags: 0

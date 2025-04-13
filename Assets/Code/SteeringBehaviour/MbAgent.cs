@@ -4,12 +4,12 @@ namespace SteeringBehaviour
 {
 	public class MbAgent: MonoBehaviour
 	{
+		[SerializeField] private ForceParams[] forceParams;
 		[SerializeField] private float forceValue = 5f;
+		[SerializeField] private float slowingDistanceForTarget = 3f;
 		
 		public SimpleMovementEntity movementEntity { get; private set; }
 		public SteeringForce entitySteeringForce { get; private set; }
-		
-		public MbAgent target;
 
 		private Camera camera_;
 
@@ -22,21 +22,8 @@ namespace SteeringBehaviour
 
 		private void Update( )
 		{
-			// var steeringForce = GetBehaviourForce( behaviourType, 0 );
-			// var steeringForce2 = GetBehaviourForce( behaviourType2, 1 );
-			//
-			// var generalSteeringForce = steeringForce + steeringForce2;
-			// currentVelocity += generalSteeringForce * Time.deltaTime;
-			//
-			// Debug.Log( "steeringForce " + steeringForce.magnitude );
-			// Debug.Log( "currentVelocity " + currentVelocity.magnitude );
-			//
-			// transform.position += currentVelocity * Time.deltaTime;
-			
-			entitySteeringForce.Seek( GetTargetPos( 0 ), forceValue );
-			entitySteeringForce.ApplyForce( Time.deltaTime );
-			entitySteeringForce.ResetForce(  );
-			
+			ApplyForces(  );
+
 			movementEntity.ApplyVelocity( Time.deltaTime );
 
 			RotateToVelocity(  );
@@ -58,46 +45,51 @@ namespace SteeringBehaviour
 			entitySteeringForce.Init( movementEntity );
 		}
 
-		/*private void SetBehaviourForce( EBehaviourType _behaviourType, int _targetIndex )
+		public void ApplyForces( )
 		{
-			switch ( _behaviourType )
+			if ( forceParams == null )
+				return;
+			
+			foreach ( var forceParam in forceParams )
 			{
-				case EBehaviourType.Seek:
-					return SteeringForces.GetSeekForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass);
-				case EBehaviourType.Flee:
-					return SteeringForces.GetFleeForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass );
-				case EBehaviourType.Arrive:
-					return SteeringForces.GetArriveForce( currentVelocity, transform.position, GetTargetPos( _targetIndex ), maxForceValue, mass, 1f );
-				case EBehaviourType.Pursuit:
-					return SteeringForces.GetPursuitForce( currentVelocity, transform.position, targets[_targetIndex].currentVelocity, GetTargetPos( _targetIndex ),  maxForceValue, mass  );
-					break;
-				case EBehaviourType.Evading:
-					return SteeringForces.GetEvadingForce( currentVelocity, transform.position, targets[_targetIndex].currentVelocity, GetTargetPos( _targetIndex ),  maxForceValue, mass  );
-				default:
-					return Vector3.zero;
+				if ( forceParam.target == null || forceParam.target.movementEntity == null )
+					continue;
+				
+				AddForce( forceParam.forceType, forceParam.target.movementEntity );
 			}
 			
-			return Vector3.zero;
-		}*/
-		
+			entitySteeringForce.ApplyForce( Time.deltaTime );
+			entitySteeringForce.ResetForce(  );
+		}
+
+		public void AddForce( EForceType _forceType, AMovementEntity _movementEntity )
+		{
+			if ( _movementEntity == null)
+				return;
+			
+			switch ( _forceType )
+			{
+				case EForceType.Seek:
+					entitySteeringForce.AddSeek( _movementEntity.position, forceValue );
+					break;
+				case EForceType.Flee:
+					entitySteeringForce.AddFlee( _movementEntity.position, forceValue );
+					break;
+				case EForceType.Arrive:
+					entitySteeringForce.AddArrive( _movementEntity.position, forceValue, slowingDistanceForTarget);
+					break;
+				case EForceType.Pursuit:
+					entitySteeringForce.AddPursuit( _movementEntity, forceValue);
+					break;
+				case EForceType.Avoid:
+					entitySteeringForce.AddAvoid( _movementEntity, forceValue );
+					break;
+			}
+		}
+
 		private void RotateToVelocity( )
 		{
 			transform.rotation = Quaternion.LookRotation( movementEntity.currentVelocity );
-		}
-
-		private Vector3 GetTargetPos( int _index )
-		{
-			if ( target == null )
-			{
-				Vector3 mousePosition = camera_.ScreenToWorldPoint(
-					new Vector3(Input.mousePosition.x, Input.mousePosition.y, -camera_.transform.position.z)
-				);
-				mousePosition.z = 0;
-				return mousePosition;
-			}
-			
-			
-			return target.movementEntity.position;
 		}
 
 		private void DrawHelpers( )

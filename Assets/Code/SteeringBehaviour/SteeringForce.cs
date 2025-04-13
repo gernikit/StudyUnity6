@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace SteeringBehaviour
 {
@@ -30,7 +31,7 @@ namespace SteeringBehaviour
 			maxForceValue = _maxValue;
 		}
 
-		public void Seek( Vector3 _targetPosition, float _forceValue )
+		public void AddSeek( Vector3 _targetPosition, float _forceValue )
 		{
 			steeringForce += SteeringForces.GetSeekForce( 
 				entity.currentVelocity, 
@@ -39,7 +40,7 @@ namespace SteeringBehaviour
 				_forceValue);
 		}
 		
-		public void Flee( Vector3 _targetPosition, float _forceValue )
+		public void AddFlee( Vector3 _targetPosition, float _forceValue )
 		{
 			steeringForce += SteeringForces.GetFleeForce( 
 				entity.currentVelocity, 
@@ -48,7 +49,7 @@ namespace SteeringBehaviour
 				_forceValue );
 		}
 		
-		public void Arrive( Vector3 _targetPosition, float _forceValue, float _slowingDistance )
+		public void AddArrive( Vector3 _targetPosition, float _forceValue, float _slowingDistance )
 		{
 			steeringForce += SteeringForces.GetArriveForce( 
 				entity.currentVelocity, 
@@ -58,7 +59,7 @@ namespace SteeringBehaviour
 				_slowingDistance);
 		}
 		
-		public void Pursuit( AMovementEntity _target, float _forceValue )
+		public void AddPursuit( AMovementEntity _target, float _forceValue )
 		{
 			steeringForce += SteeringForces.GetPursuitForce( 
 				entity.currentVelocity, 
@@ -68,7 +69,7 @@ namespace SteeringBehaviour
 				_forceValue);
 		}
 		
-		public void Avoid( AMovementEntity _target, float _forceValue )
+		public void AddAvoid( AMovementEntity _target, float _forceValue )
 		{
 			steeringForce += SteeringForces.GetEvadingForce( 
 				entity.currentVelocity, 
